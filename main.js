@@ -45,8 +45,9 @@ class ReservePlate {
 
     reservePlate () {
         request({
+            json: true,
             jar: this._jar,
-            url: this._checkoutLink,
+            url: 'https://api.ppq.com.au/api/session/UpdateReservation/3f446b19-ab66-49dc-9f27-d55e76be4324?v=f36af70eba0148d1aabb0b88db494eb2',
             headers: {
                 'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
                 'accept-language': 'en-US,en;q=0.9',
@@ -63,12 +64,13 @@ class ReservePlate {
             }
         }, (err, resp, body) => {
             // Success
-            if (body && body.indexOf('Review your order') > -1) {
+            if (body && body.Success) {
                 console.log(`[PPQ RESERVER] "${this._plateCombo}" combination IS RESERVED for you under this link: ${this._checkoutLink}`);
-                return setTimeout(() => this.reservePlate(), 60000);
-            }
+            } else {
             // Failed
-            console.log("Failed?");
+                console.log("Failed?");
+            }
+            return setTimeout(() => this.reservePlate(), 60000);
         });
     }
 }
